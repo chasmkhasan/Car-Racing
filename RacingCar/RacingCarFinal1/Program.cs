@@ -73,38 +73,41 @@ namespace RacingCarFinal1
 
                 if (finishedTask == firstCarTask)
                 {
-                    Console.WriteLine("Lamborghini has Completed the Race.");
-                    //Car racingResult = firstCarTask.Result;
-                    //PrintCar(racingResult);
-                    PrintCar(firstCar);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n     Lamborghini has Completed the Race. CONGRATULATION \n");
+                    Console.ResetColor();
+                    Console.ReadKey();
+                    //PrintCar(firstCar);
                 }
                 else if (finishedTask == secondCarTask)
                 {
-                    Console.WriteLine("Rolls Royce has Completed the Race.");
-                    //Car racingResult = secondCarTask.Result;
-                    //PrintCar(racingResult);
-                    PrintCar(secondCar);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n     Rolls Royce has Completed the Race. CONGRATULATION \n");
+                    Console.ResetColor();
+                    //PrintCar(secondCar);
                 }
 
                 else if (finishedTask == thirdCarTask)
                 {
-                    Console.WriteLine("Porsche 911 has Completed the Race.");
-                    //Car racingResult = thirdCarTask.Result;
-                    //PrintCar(racingResult);
-                    PrintCar(thirdCar);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n     Porsche 911 has Completed the Race. CONGRATULATION \n");
+                    Console.ResetColor();
+                    //PrintCar(thirdCar);
                 }
 
                 else if (finishedTask == fourthCarTask)
                 {
-                    Console.WriteLine("Ferrari  has Completed the Race.");
-                    //Car racingResult = thirdCarTask.Result;
-                    // PrintCar(racingResult);
-                    PrintCar(fourthCar);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n     Ferrari has Completed the Race. CONGRATULATION \n");
+                    Console.ResetColor();
+                    //PrintCar(fourthCar);
                 }
 
                 else if (finishedTask == fourthCarTask)
                 {
-                    Console.WriteLine("All eggs are done. Simulation over");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n     Simulation over       \n");
+                    Console.ResetColor();
                 }
 
                 await finishedTask;
@@ -266,65 +269,128 @@ namespace RacingCarFinal1
         {
             while (true)
             {
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                //Console.Clear();
-                cars.ForEach(car =>
+                DateTime start = DateTime.Now;
+
+                bool gotKey = false;
+
+                while ((DateTime.Now - start).TotalSeconds < 2)
                 {
-                    Console.WriteLine($"\n{car.DistanceStart} meter has reached. Destination 10000 Meters.");
-                    Console.WriteLine($"{car.CarName} has speed {car.SpeedPerHour}\n");
-                });
+                    if (Console.KeyAvailable)
+                    {
+                        gotKey = true;
+                        break;
+                    }
+                }
+                if (gotKey)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    Console.Clear();
+                    cars.ForEach(car =>
+                    {
+                        Console.WriteLine($"\n{car.DistanceStart} meter has reached. Destination 10000 Meters.");
+                        Console.WriteLine($"{car.CarName} has speed {car.SpeedPerHour}\n");
+                    });
 
-
+                }
             }
         }
 
         public async static Task<Car> GenerateEvent(Car car)
-        //public static void GenerateEvent(Car car)
         {
+            
+            int raceDistance = 0; // (10km * 1000) = 10000 m
+            int thirtySecondNeedtoReach = 0;
+            int engineFailurePerHappened = 1;
+
             while (true)
             {
-                //Console.WriteLine($"{car.CarName}");
                 Random random = new Random();
 
-                int eventChance = random.Next(1, 10);
+                int eventChance = random.Next(1, 51);
 
-
-                if (eventChance <= 2)
+                if (eventChance == 1)
                 {
                     // Out of gas
-                    OutOfGas(car);
-                    
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n{car.CarName} is out of gas and needs to refuel.\n");
+                    Console.ResetColor();
+                    await Task.Delay(TimeSpan.FromSeconds(3));
 
+                    car.DistanceStart += (1000 + raceDistance);
+
+                    Console.WriteLine($"\n{car.CarName} has reach {car.DistanceStart} meter now.\n");
+
+                    if (car.DistanceStart >= car.DistanceEnd)
+                    {
+                        // Car reached.
+                        return car;
+                    }
                 }
 
-                else if (eventChance >= 3 && eventChance <= 6)
+                else if (eventChance >= 2 && eventChance <= 3)
                 {
                     // Puncture
-                    Punture(car);
-                    
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n{car.CarName} has a puncture and needs to change tires.\n");
+                    Console.ResetColor();
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+
+                    car.DistanceStart += (1000 + raceDistance);
+                    Console.WriteLine($"\n{car.CarName} has reach {car.DistanceStart} meter now.\n");
+
+                    if (car.DistanceStart >= car.DistanceEnd)
+                    {
+                        // Car reached.
+                        return car;
+                    }
+
                 }
 
-                else if (eventChance >= 7 && eventChance <= 15)
+                else if (eventChance >= 4 && eventChance <= 8)
                 {
                     // Bird on windshield
-                    Windshield(car);
-                    
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n{car.CarName} has a bird on the windshield and needs to wash it.\n");
+                    Console.ResetColor();
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+
+                    car.DistanceStart += (1000 + raceDistance);
+                    Console.WriteLine($"\n{car.CarName} has reach {car.DistanceStart} meter now.\n");
+
+                    if (car.DistanceStart >= car.DistanceEnd)
+                    {
+                        // Car reached.
+                        return car;
+                    }
+
                 }
-                else if (eventChance >= 16 && eventChance <= 28)
+                else if (eventChance >= 9 && eventChance <= 18)
                 {
                     // Engine failure
-                    EngineFailure(car);
-                    
-                }
-                Task.Delay(TimeSpan.FromSeconds(5));
-                if (car.DistanceStart >= car.DistanceEnd)
-                {
-                    // Car reached.
-                    return car;
-                }
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"\n{car.CarName} has an engine failure and needs to reduce speed.\n");
+                    Console.ResetColor();
+                    await Task.Delay(TimeSpan.FromSeconds(3));
 
-            }
-            //return car;
+                    car.DistanceStart += (1000 + raceDistance);
+                    Console.WriteLine($"\n{car.CarName} has reach {car.DistanceStart} meter now.\n");
+
+                    car.DistanceStart += (thirtySecondNeedtoReach + raceDistance);
+                    car.SpeedPerHour -= engineFailurePerHappened;
+
+                    Console.WriteLine($"{car.CarName} has reduced the speed due Engine Failur. Now speed is {car.SpeedPerHour}\n");
+
+                    if (car.DistanceStart >= car.DistanceEnd)
+                    {
+                        // Car reached.
+                        return car;
+                    }
+                }
+            }   
         }
     }
 }
