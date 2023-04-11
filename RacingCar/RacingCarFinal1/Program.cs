@@ -284,7 +284,7 @@ namespace RacingCarFinal1
                 if (gotKey)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                    Console.Clear();
+                    //Console.Clear();
                     cars.ForEach(car =>
                     {
                         Console.WriteLine($"\n{car.DistanceStart} meter has reached. Destination 10000 Meters.");
