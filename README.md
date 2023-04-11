@@ -14,6 +14,9 @@ Each car will have to passed few EVENT which is IMPACT by RANDOM NUMBER.
 ## Technologies Used
 { get; set; }, List, Async & Task, Random 
 
+## Learning Part
+Async and Task, Threading, Console.Clear(), Random with different Event, Probability
+
 ![Diagram of Car Racing](CarRacing.jpeg)
 
 ## Creator: Welcome to visit my link:
